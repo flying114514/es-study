@@ -6,12 +6,10 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
-import org.elasticsearch.index.query.BoolQueryBuilder;
-import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.index.query.RangeQueryBuilder;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.aggregations.AggregationBuilder;
+import org.elasticsearch.search.aggregations.AggregationBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 
@@ -149,20 +147,134 @@ public class ESTest_Doc_Query {
 //            System.out.println(hit.getSourceAsString());
 //        }
 
-        //范围查询
+//        //范围查询
+//        //创建request
+//        SearchRequest request = new SearchRequest();
+//        //指定索引
+//        request.indices("user");
+//        //创建查询条件
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        //创建布尔查询
+//        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
+//
+//        rangeQuery.gte(30);
+//        rangeQuery.lte(40);
+//        //设置查询条件
+//        builder.query(rangeQuery);
+//        //设置查询
+//        request.source(builder);
+//
+//        //执行查询
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+//
+//        System.out.println(response.getTook());
+//        SearchHits hits = response.getHits();
+//        System.out.println(hits);
+//        System.out.println("总条数：" + hits.getTotalHits());
+//
+//        for (SearchHit hit : hits) {
+//            System.out.println(hit.getSourceAsString());
+//        }
+//        //模糊查询
+//        //创建request
+//        SearchRequest request = new SearchRequest();
+//        //指定索引
+//        request.indices("user");
+//        //创建查询条件
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        //设置查询条件
+//        builder.query(QueryBuilders.fuzzyQuery("name", "wang").fuzziness(Fuzziness.TWO));
+//
+//
+//        //设置查询
+//        request.source(builder);
+//
+//        //执行查询
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+//
+//        System.out.println(response.getTook());
+//        SearchHits hits = response.getHits();
+//        System.out.println(hits);
+//        System.out.println("总条数：" + hits.getTotalHits());
+//
+//        for (SearchHit hit : hits) {
+//            System.out.println(hit.getSourceAsString());
+//        }
+
+//        //高亮查询
+//        //创建request
+//        SearchRequest request = new SearchRequest();
+//        //指定索引
+//        request.indices("user");
+//
+//
+//        //创建查询条件
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        //设置查询条件
+//        TermsQueryBuilder termsQueryBuilder = QueryBuilders.termsQuery("name", "zhangsan");
+//        HighlightBuilder highlightBuilder = new HighlightBuilder();
+//        highlightBuilder.preTags("<font color='red'>");
+//        highlightBuilder.postTags("<font>");
+//        highlightBuilder.field("name");
+//        builder.highlighter(highlightBuilder);
+//        builder.query(termsQueryBuilder);
+//
+//        //设置查询
+//        request.source(builder);
+//
+//        //执行查询
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+//
+//        System.out.println(response.getTook());
+//        SearchHits hits = response.getHits();
+//        System.out.println(hits);
+//        System.out.println("总条数：" + hits.getTotalHits());
+//
+//        for (SearchHit hit : hits) {
+//            System.out.println(hit.getSourceAsString());
+//        }
+
+//        //聚合查询
+//        //创建request
+//        SearchRequest request = new SearchRequest();
+//        //指定索引
+//        request.indices("user");
+//
+//
+//        //创建查询条件
+//        SearchSourceBuilder builder = new SearchSourceBuilder();
+//        //设置查询条件
+//        AggregationBuilder aggregationBuilder = AggregationBuilders.max("max_age").field("age");
+//        builder.aggregation(aggregationBuilder);
+//
+//        //设置查询
+//        request.source(builder);
+//
+//        //执行查询
+//        SearchResponse response = esClient.search(request, RequestOptions.DEFAULT);
+//
+//        System.out.println(response.getTook());
+//        SearchHits hits = response.getHits();
+//        System.out.println(hits);
+//        System.out.println("总条数：" + hits.getTotalHits());
+//
+//        for (SearchHit hit : hits) {
+//            System.out.println(hit.getSourceAsString());
+//        }
+
+        //分组查询
         //创建request
         SearchRequest request = new SearchRequest();
         //指定索引
         request.indices("user");
+
+
         //创建查询条件
         SearchSourceBuilder builder = new SearchSourceBuilder();
-        //创建布尔查询
-        RangeQueryBuilder rangeQuery = QueryBuilders.rangeQuery("age");
-
-        rangeQuery.gte(30);
-        rangeQuery.lte(40);
         //设置查询条件
-        builder.query(rangeQuery);
+        AggregationBuilder aggregationBuilder = AggregationBuilders.terms("ageGroup").field("age");
+        builder.aggregation(aggregationBuilder);
+
         //设置查询
         request.source(builder);
 
